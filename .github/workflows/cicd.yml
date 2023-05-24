@@ -6,7 +6,7 @@ on:
       - main
   pull_request:
     branches:
-      -main
+      - main
 
 jobs:
   build:
@@ -29,7 +29,32 @@ jobs:
         run: npm run build
 
       - name: Run frontend tests
-        run: npm test --prefix frontend
+        run: npm test --prefix frontend --coverage --coverageReporters=json:./coverage/frontend-coverage.json
 
       - name: Run backend tests
-        run: npm test --prefix backend
+        run: npm test --prefix backend --coverage --coverageReporters=json:./coverage/backend-coverage.json
+
+      - name: Generate frontend coverage report
+        run: npx istanbul-reports combine -d ./coverage/frontend-report -r html json ./coverage/frontend-coverage.json
+
+      - name: Generate backend coverage report
+        run: npx istanbul-reports combine -d ./coverage/backend-report -r html json ./coverage/backend-coverage.json
+
+      - name: Code Coverage Report - Frontend
+        uses: actions/upload-artifact@v2
+        with:
+          name: frontend-coverage
+          path: ./coverage/frontend-report
+
+      - name: Code Coverage Report - Backend
+        uses: actions/upload-artifact@v2
+        with:
+          name: backend-coverage
+          path: ./coverage/backend-report
+
+      - name: Add Coverage PR Comment
+        uses: marocchino/sticky-pull-request-comment@v2
+        if: github.event_name == 'pull_request'
+        with:
+          recreate: true
+          path: code-coverage-results.md
