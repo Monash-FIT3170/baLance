@@ -47,3 +47,26 @@ jobs:
         with:
           recreate: true
           path: ./coverage/lcov-report/index.html
+  
+  deploy_development:
+    name: Deploying to the Development environment
+    if: github.ref =='refs/heads/main'
+    runs-on: ubuntu-latest
+    environment: Development
+    needs: build
+
+    steps:
+    - name: Git clone the repository
+      uses: actions/checkout@v3
+    
+    - name: Configure AWS Credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }} #  TODO need to add this to secrets
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }} #  TODO need to add this to secrets
+        aws-region: us-east-1 # maybe best not to hardcode
+    
+    - name: Deploying to Development
+      run: echo"" # place holder for when we set up place to deploy  
+  
+  # can add another job to deploy to another env (prod) if needed
