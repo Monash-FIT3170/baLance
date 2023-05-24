@@ -1,11 +1,13 @@
+import React from 'react';
 import { render, screen } from '@testing-library/react';
-import App from '../App';
+import UnitPage from '../src/pages/UnitHomePage.jsx';
 
-describe('Frontend Tests', () => {
-  it('renders the app component', () => {
-    render(<App />);
-    const linkElement = screen.getByText(/Hello, World!/i);
-    expect(linkElement).toBeInTheDocument();
-  });
+test('renders Unit Home Page', () => {
+  render(<UnitPage />);
+  
+  // Verify the presence of the heading
+  const headingElement = screen.getByText('Unit Home Page');
+  expect(headingElement).toBeInTheDocument();
+  
+  // Add more assertions as needed for other elements and behaviors
 });
-
