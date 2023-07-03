@@ -3,10 +3,10 @@ name: Balance App GitHub CICD
 on:
   push:
     branches:
-      - main
+      - feature/cicd-github-actions
   pull_request:
     branches:
-      - feature/cicd-github-actions
+      - main
 
 jobs:
   build:
